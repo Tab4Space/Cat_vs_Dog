@@ -134,7 +134,7 @@ with tf.Session() as sess:
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
     sess.run(tf.global_variables_initializer())
     
-    # chech image
+    # check image
     # for i in range(100):
 
     #     image_value, label_value, imagefile_value = sess.run([image_batch, label_batch, imagefile])
