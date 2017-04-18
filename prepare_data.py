@@ -1,14 +1,21 @@
+"""
+1. Read file list
+2. Read image using cv2
+3. Resize image
+4. Restore image(64x64 size and gray scale)
+"""
+
 import csv, cv2, os
 from tqdm import tqdm
 
 
-ORIGIN_TRAIN_DATA_PATH = '/home/bhappy/Dropbox/myCatDog/train/'
-ORIGIN_TEST_DATA_PATH = '/home/bhappy/Dropbox/myCatDog/test/'
+ORIGIN_TRAIN_DATA_PATH = 'input your data path'
+ORIGIN_TEST_DATA_PATH = 'input your data path'
 
-RESIZE_TRAIN_DATA_PATH = '/home/bhappy/Dropbox/myCatDog/resize_train'
-RESIZE_TEST_DATA_PATH = '/home/bhappy/Dropbox/myCatDog/resize_test'
+RESIZE_TRAIN_DATA_PATH = 'input your data path'
+RESIZE_TEST_DATA_PATH = 'input your data path'
 
-TRAIN_LABEL_CSV_PATH = '/home/bhappy/Dropbox/myCatDog/train_label.csv'
+TRAIN_LABEL_CSV_PATH = 'input your data path'
 
 
 ### Prepare image data for training
