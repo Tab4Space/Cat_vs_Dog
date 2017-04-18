@@ -10,8 +10,8 @@ import cv2, os
 import prepare_data
 
 
-prepare_data.prepre_resize_train()      ## Create Data
-prepare_data.prepare_resize_test()      ## Create Data
+prepare_data.prepre_resize_train()      ## Create Train Data
+prepare_data.prepare_resize_test()      ## Create Train Data
 prepare_data.prepare_csv()              ## Create Label
 
 
