@@ -20,18 +20,19 @@ IMAGE_WIDTH = 64
 IMAGE_HEIGHT = 64
 KEEP_PROB = 0.7
 LEARNING_RATE = 1e-3
-TRAIN_EPOCH = 10
-BATCH_SIZE = 50
+TRAIN_EPOCH = 15
+BATCH_SIZE = 10
 NUM_THREADS = 4
 CAPACITY = 5000
 MIN_AFTER_DEQUEUE = 100
 NUM_CLASSES = 2
 FILTER_SIZE = 2
 POOLING_SIZE = 2
+MODEL_NAME = './tmp/model-{}-{}-{}'.format(TRAIN_EPOCH, LEARNING_RATE, BATCH_SIZE)
 
 
 # input your path
-csv_file =  tf.train.string_input_producer(['input your data dir path'], name='filename_queue', shuffle=True)       
+csv_file =  tf.train.string_input_producer(['/home/bhappy/Desktop/Cat_vs_Dog/train_label.csv'], name='filename_queue', shuffle=True)       
 csv_reader = tf.TextLineReader()
 _,line = csv_reader.read(csv_file)
 
@@ -55,7 +56,8 @@ Y_one_hot = tf.reshape(Y_one_hot, [-1, NUM_CLASSES])
 
 ### Graph part
 print "original: ", X
-filter1 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 1, 32], stddev=0.01))
+# filter1 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 1, 32], stddev=0.01))
+filter1 = tf.get_variable('filter1', shape=[FILTER_SIZE, FILTER_SIZE, 1, 32], initializer=tf.contrib.layers.xavier_initializer())
 L1 = tf.nn.conv2d(X, filter1, strides=[1, 1, 1, 1], padding='SAME')
 # print L1
 L1 = tf.nn.relu(L1)
@@ -63,7 +65,8 @@ L1 = tf.nn.max_pool(L1, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2,
 print "after 1-layer: ", L1
 
 
-filter2 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 32, 64], stddev=0.01))
+# filter2 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 32, 64], stddev=0.01))
+filter2= tf.get_variable('filter2', shape=[FILTER_SIZE, FILTER_SIZE, 32, 64], initializer=tf.contrib.layers.xavier_initializer())
 L2 = tf.nn.conv2d(L1, filter2, strides=[1, 1, 1, 1], padding='SAME')
 # print L2
 L2 = tf.nn.relu(L2)
@@ -71,7 +74,8 @@ L2 = tf.nn.max_pool(L2, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2,
 print "after 2-layer: ", L2
 
 
-filter3 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 64, 128], stddev=0.01))
+# filter3 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 64, 128], stddev=0.01))
+filter3 = tf.get_variable('filter3', shape=[FILTER_SIZE, FILTER_SIZE, 64, 128], initializer=tf.contrib.layers.xavier_initializer())
 L3 = tf.nn.conv2d(L2, filter3, strides=[1, 1, 1, 1], padding='SAME')
 # print L3
 L3 = tf.nn.relu(L3)
@@ -79,7 +83,8 @@ L3 = tf.nn.max_pool(L3, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2,
 print "after 3-layer: ", L3
 
 
-filter4 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 128, 256], stddev=0.01))
+# filter4 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 128, 256], stddev=0.01))
+filter4 = tf.get_variable('filter4', shape=[FILTER_SIZE, FILTER_SIZE, 128, 256], initializer=tf.contrib.layers.xavier_initializer())
 L4 = tf.nn.conv2d(L3, filter4, strides=[1, 1, 1, 1], padding='SAME')
 # print L4
 L4 = tf.nn.relu(L4)
@@ -87,7 +92,8 @@ L4 = tf.nn.max_pool(L4, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2,
 print "after 4-layer: ", L4
 
 
-filter5 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 256, 512], stddev=0.01))
+# filter5 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 256, 512], stddev=0.01))
+filter5 = tf.get_variable('filter5', shape=[FILTER_SIZE, FILTER_SIZE, 256, 512], initializer=tf.contrib.layers.xavier_initializer())
 L5 = tf.nn.conv2d(L4, filter5, strides=[1, 1, 1, 1], padding='SAME')
 # print L5
 L5 = tf.nn.relu(L5)
@@ -95,7 +101,8 @@ L5 = tf.nn.max_pool(L5, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2,
 print "after 5-layer: ", L5
 
 
-filter6 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 512, 1024], stddev=0.01))
+# filter6 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 512, 1024], stddev=0.01))
+filter6 = tf.get_variable('filter6', shape=[FILTER_SIZE, FILTER_SIZE, 512, 1024], initializer=tf.contrib.layers.xavier_initializer())
 L6 = tf.nn.conv2d(L5, filter6, strides=[1, 1, 1, 1], padding='SAME')
 # print L6
 L6 = tf.nn.relu(L6)
@@ -113,8 +120,7 @@ b1 = tf.Variable(tf.random_normal([2]))
 logits = tf.matmul(L6, flat_W1) + b1
 
 
-param_list = [filter1, filter2, filter3, filter4, filter5, filter6, flat_W1, b1]
-saver = tf.train.Saver(param_list)
+saver = tf.train.Saver()
 
 
 print "========================================================================================="
@@ -158,7 +164,7 @@ with tf.Session() as sess:
             cost_value, _ = sess.run([cost, optimizer], feed_dict={X: batch_x, Y: batch_y})
             avg_cost += cost_value / total_batch
 
-            saver.save(sess, 'model.ckpt', global_step=100)
+            saver.save(sess, MODEL_NAME)
 
         print('Epoch:', '%04d' % (epoch + 1), 'cost =', '{:.9f}'.format(avg_cost))
 
@@ -168,16 +174,16 @@ with tf.Session() as sess:
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 
-    # 50 images test
+    # images test
     test_batch = []
     file_list = []
-    for test_file in os.listdir('resize_train')[:50]:
+    for test_file in os.listdir('resize_train')[:BATCH_SIZE]:
         file_list.append(test_file)
         img = cv2.imread('resize_train/'+test_file, cv2.IMREAD_GRAYSCALE)
         test_batch.append(img)
 
     input_batch = np.array(test_batch)
-    input_batch = input_batch.reshape(50, 64, 64, 1)
+    input_batch = input_batch.reshape(BATCH_SIZE, 64, 64, 1)
 
     pred = sess.run(tf.argmax(logits, 1), feed_dict={X: input_batch})
     print 'predict : ', pred
@@ -186,8 +192,8 @@ with tf.Session() as sess:
 
     # show prediction using pyplot
     fig = plt.figure()
-    for i in range(50):
-        y = fig.add_subplot(5, 10, i+1)
+    for i in range(BATCH_SIZE):
+        y = fig.add_subplot(2, 5, i+1)
         show_img = input_batch[i, :, :, 0]
         y.imshow(show_img, cmap='gray')
         plt.title(pred[i])
