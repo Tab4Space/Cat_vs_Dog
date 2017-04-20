@@ -9,13 +9,13 @@ import csv, cv2, os
 from tqdm import tqdm
 
 
-ORIGIN_TRAIN_DATA_PATH = 'input your data path'
-ORIGIN_TEST_DATA_PATH = 'input your data path'
+ORIGIN_TRAIN_DATA_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/train/'
+ORIGIN_TEST_DATA_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/test/'
 
-RESIZE_TRAIN_DATA_PATH = 'input your data path'
-RESIZE_TEST_DATA_PATH = 'input your data path'
+RESIZE_TRAIN_DATA_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/resize_train'
+RESIZE_TEST_DATA_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/resize_test'
 
-TRAIN_LABEL_CSV_PATH = 'input your data path'
+TRAIN_LABEL_CSV_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/train_label.csv'
 
 
 ### Prepare image data for training
@@ -44,6 +44,8 @@ def prepre_resize_train():
             elif len(data.split('.')[1]) == 4:
                 file_name = data.replace(data.split('.')[1], '0'+data.split('.')[1])
                 cv2.imwrite(RESIZE_TRAIN_DATA_PATH+'/'+file_name, img)
+            else:
+                cv2.imwrite(RESIZE_TRAIN_DATA_PATH+'/'+data, img)
 
 
 def prepare_resize_test():
@@ -71,6 +73,8 @@ def prepare_resize_test():
             elif len(data.split('.')[0]) == 4:
                 file_name = data.replace(data.split('.')[0], '0'+data.split('.')[0])
                 cv2.imwrite(RESIZE_TEST_DATA_PATH+'/'+file_name, img)
+            else:
+                cv2.imwrite(RESIZE_TEST_DATA_PATH+'/'+data, img)
 
 
 def prepare_csv():
