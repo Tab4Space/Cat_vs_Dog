@@ -32,7 +32,7 @@ MODEL_NAME = './tmp/model-{}-{}-{}'.format(TRAIN_EPOCH, LEARNING_RATE, BATCH_SIZ
 
 
 # input your path
-csv_file =  tf.train.string_input_producer(['/home/bhappy/Desktop/Cat_vs_Dog/train_label.csv'], name='filename_queue', shuffle=True)       
+csv_file =  tf.train.string_input_producer(['INPUT YOUR LABEL CSV PATH'], name='filename_queue', shuffle=True)       
 csv_reader = tf.TextLineReader()
 _,line = csv_reader.read(csv_file)
 
@@ -55,14 +55,14 @@ Y_one_hot = tf.reshape(Y_one_hot, [-1, NUM_CLASSES])
 
 
 ### Graph part
-print "original: ", X
+print("original: ", X)
 # filter1 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 1, 32], stddev=0.01))
 filter1 = tf.get_variable('filter1', shape=[FILTER_SIZE, FILTER_SIZE, 1, 32], initializer=tf.contrib.layers.xavier_initializer())
 L1 = tf.nn.conv2d(X, filter1, strides=[1, 1, 1, 1], padding='SAME')
 # print L1
 L1 = tf.nn.relu(L1)
 L1 = tf.nn.max_pool(L1, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2, 2, 1], padding='SAME')
-print "after 1-layer: ", L1
+print("after 1-layer: ", L1)
 
 
 # filter2 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 32, 64], stddev=0.01))
@@ -71,7 +71,7 @@ L2 = tf.nn.conv2d(L1, filter2, strides=[1, 1, 1, 1], padding='SAME')
 # print L2
 L2 = tf.nn.relu(L2)
 L2 = tf.nn.max_pool(L2, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2, 2, 1], padding='SAME')
-print "after 2-layer: ", L2
+print("after 2-layer: ", L2)
 
 
 # filter3 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 64, 128], stddev=0.01))
@@ -80,7 +80,7 @@ L3 = tf.nn.conv2d(L2, filter3, strides=[1, 1, 1, 1], padding='SAME')
 # print L3
 L3 = tf.nn.relu(L3)
 L3 = tf.nn.max_pool(L3, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2, 2, 1], padding='SAME')
-print "after 3-layer: ", L3
+print("after 3-layer: ", L3)
 
 
 # filter4 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 128, 256], stddev=0.01))
@@ -89,7 +89,7 @@ L4 = tf.nn.conv2d(L3, filter4, strides=[1, 1, 1, 1], padding='SAME')
 # print L4
 L4 = tf.nn.relu(L4)
 L4 = tf.nn.max_pool(L4, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2, 2, 1], padding='SAME')
-print "after 4-layer: ", L4
+print("after 4-layer: ", L4)
 
 
 # filter5 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 256, 512], stddev=0.01))
@@ -98,7 +98,7 @@ L5 = tf.nn.conv2d(L4, filter5, strides=[1, 1, 1, 1], padding='SAME')
 # print L5
 L5 = tf.nn.relu(L5)
 L5 = tf.nn.max_pool(L5, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2, 2, 1], padding='SAME')
-print "after 5-layer: ", L5
+print("after 5-layer: ", L5)
 
 
 # filter6 = tf.Variable(tf.random_normal([FILTER_SIZE, FILTER_SIZE, 512, 1024], stddev=0.01))
@@ -107,12 +107,10 @@ L6 = tf.nn.conv2d(L5, filter6, strides=[1, 1, 1, 1], padding='SAME')
 # print L6
 L6 = tf.nn.relu(L6)
 L6 = tf.nn.max_pool(L6, ksize=[1, POOLING_SIZE, POOLING_SIZE, 1], strides=[1, 2, 2, 1], padding='SAME')
-print "after 6-layer: ", L6
-
-print "========================================================================================="
+print("after 6-layer: ", L6)
 
 L6 = tf.reshape(L6, [-1, 1*1*1024])
-print "reshape for fully: ", L6
+print("reshape for fully: ", L6)
 
 
 flat_W1 = tf.get_variable("flat_W", shape=[1*1*1024, 2], initializer=tf.contrib.layers.xavier_initializer())
@@ -123,10 +121,10 @@ logits = tf.matmul(L6, flat_W1) + b1
 saver = tf.train.Saver()
 
 
-print "========================================================================================="
-print "logits: ", logits
-print "Y one hot: ", Y_one_hot
-print "========================================================================================="
+print("=========================================================================================")
+print("logits: ", logits)
+print("Y one hot: ", Y_one_hot)
+print("=========================================================================================")
 
 
 
@@ -139,18 +137,6 @@ with tf.Session() as sess:
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
     sess.run(tf.global_variables_initializer())
-    
-    # check image
-    # for i in range(100):
-
-    #     image_value, label_value, imagefile_value = sess.run([image_batch, label_batch, imagefile])
-    #     print image_value.shape
-    #     image_value = image_value.reshape(IMAGE_WIDTH, IMAGE_HEIGHT)
-
-    #     plt.imshow(image_value)
-    #     plt.title(label_value+":"+imagefile_value)
-    #     plt.show()
-
 
     for epoch in range(TRAIN_EPOCH):
         avg_cost = 0
@@ -186,8 +172,8 @@ with tf.Session() as sess:
     input_batch = input_batch.reshape(BATCH_SIZE, 64, 64, 1)
 
     pred = sess.run(tf.argmax(logits, 1), feed_dict={X: input_batch})
-    print 'predict : ', pred
-    print file_list
+    print('predict : ', pred)
+    print(file_list)
 
 
     # show prediction using pyplot

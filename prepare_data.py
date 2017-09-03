@@ -9,14 +9,11 @@ import csv, cv2, os
 from tqdm import tqdm
 
 
-ORIGIN_TRAIN_DATA_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/train/'
-ORIGIN_TEST_DATA_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/test/'
-
-RESIZE_TRAIN_DATA_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/resize_train'
-RESIZE_TEST_DATA_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/resize_test'
-
-TRAIN_LABEL_CSV_PATH = '/home/bhappy/Desktop/Cat_vs_Dog/train_label.csv'
-
+ORIGIN_TRAIN_DATA_PATH = "INPUT YOUR TRAIN SET PATH"
+ORIGIN_TEST_DATA_PATH = "INPUT YOUR TEST SET PATH"
+RESIZE_TRAIN_DATA_PATH = "INPUT YOUR RESIZED TRAIN SET PATH"
+RESIZE_TEST_DATA_PATH = "INPUT YOUR RESIZED TEST SET PATH"
+TRAIN_LABEL_CSV_PATH = "INPUT YOUR LABEL CSV PATH"
 
 ### Prepare image data for training
 def prepre_resize_train():
