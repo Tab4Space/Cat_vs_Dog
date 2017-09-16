@@ -17,7 +17,7 @@ MIN_AFTER_DEQUEUE = 100
 NUM_CLASSES = 2
 FILTER_SIZE = 2
 POOLING_SIZE = 2
-MODEL_NAME = './tmp3/model-{}-{}'.format(TRAIN_EPOCH, LEARNING_RATE)
+MODEL_NAME = './tmp/model-{}-{}'.format(TRAIN_EPOCH, LEARNING_RATE)
 
 
 X = tf.placeholder(tf.float32, [None, IMAGE_WIDTH, IMAGE_HEIGHT, 1])
@@ -95,7 +95,7 @@ with tf.Session() as sess:
         else:
             cv2.putText(frame, 'Dog', (70, 70), cv2.FONT_HERSHEY_DUPLEX, 2, (0, 0, 255))
 
-
+        cv2.rectangle(frame, (145, 65), (145+350, 65+350), (255, 0, 0), 2)
         cv2.imshow('webcam', frame)
 
         

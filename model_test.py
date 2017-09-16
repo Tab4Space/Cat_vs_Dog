@@ -17,7 +17,7 @@ MIN_AFTER_DEQUEUE = 100
 NUM_CLASSES = 2
 FILTER_SIZE = 2
 POOLING_SIZE = 2
-MODEL_NAME = './tmp/model-{}-{}-{}'.format(TRAIN_EPOCH, LEARNING_RATE, BATCH_SIZE)
+MODEL_NAME = './tmp/model-{}-{}'.format(TRAIN_EPOCH, LEARNING_RATE)
 
 test_image_list = ['INPUT YOUR RESIZED TEST SET PATH' + file_name for file_name in os.listdir('/home/bhappy/Desktop/Cat_vs_Dog/resize_test/')]
 
@@ -91,7 +91,7 @@ with tf.Session() as sess:
     saver.restore(sess, MODEL_NAME)
     print('Model restored from file')
 
-    for i in range(12500/BATCH_SIZE):
+    for i in range(int(12500/BATCH_SIZE)):
         batch_x = sess.run(test_batch_x)
         
         pred = sess.run(tf.argmax(logits, 1), feed_dict={X: batch_x})
